@@ -1,8 +1,10 @@
 package com.universitymanagementserver.server.controllers;
 
-
+import com.universitymanagementserver.server.Constant;
 import com.universitymanagementserver.server.models.StudentModel;
 import com.universitymanagementserver.server.services.StudentService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +32,7 @@ public class StudentController {
         String password = (String) StudentMap.get("password");
 
         StudentModel student = studentService.RegisterStudent(name , email , password);
-        Map<String , String> map = new HashMap<>();
-        map.put("message","registered successfully");
-        return new ResponseEntity<>(map , HttpStatus.OK);
+        return new ResponseEntity<>(generateJWTToken(student) , HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -41,9 +42,23 @@ public class StudentController {
         String password = (String) StudentMap.get("password");
 
         StudentModel student = studentService.ValidatingStudent(email , password);
+        return new ResponseEntity<>(generateJWTToken(student) , HttpStatus.OK);
+    }
+
+    private Map<String , String> generateJWTToken(StudentModel student)
+    {
+        long timestamp = System.currentTimeMillis();
+        String token = Jwts.builder().signWith(SignatureAlgorithm.HS256 , Constant.SECRET_API_KEY)
+                .setIssuedAt(new Date(timestamp))
+                .setExpiration(new Date(timestamp + Constant.EXPIRATION_TIME))
+                .claim("userId" , student.getUserId())
+                .claim("name" , student.getName())
+                .claim("email" , student.getEmail())
+                .compact();
+
         Map<String , String> map = new HashMap<>();
-        map.put("message","login successfully");
-        return new ResponseEntity<>(map , HttpStatus.OK);
+        map.put("token", token);
+        return map;
     }
 
 }

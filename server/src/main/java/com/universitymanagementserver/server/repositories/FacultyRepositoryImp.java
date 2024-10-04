@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.Map;
 
 @Repository
 public class FacultyRepositoryImp implements FacultyRepository {
