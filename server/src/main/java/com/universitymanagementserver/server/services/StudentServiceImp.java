@@ -25,7 +25,8 @@ public class StudentServiceImp implements StudentService {
     @Override
     public StudentModel RegisterStudent(String name, String email, String password) throws ServerAuthException {
         Pattern pattern =  Pattern.compile("^(.+)@(.+)$");
-        if(email != null) email = email.toLowerCase();
+        if(email != null)
+            email = email.toLowerCase();
         if(!pattern.matcher(email).matches())
             throw new ServerAuthException("Invalid email");
         Integer count = studentRepository.GetCountByEmail(email);
