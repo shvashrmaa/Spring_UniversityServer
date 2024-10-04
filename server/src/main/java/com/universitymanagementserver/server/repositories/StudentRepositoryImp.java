@@ -2,6 +2,7 @@ package com.universitymanagementserver.server.repositories;
 
 import com.universitymanagementserver.server.exceptions.ServerAuthException;
 import com.universitymanagementserver.server.models.StudentModel;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,12 +18,14 @@ public class StudentRepositoryImp implements StudentRepository {
 
     private static final String SQL_CREATE = "insert into student(userId , name , email , password) values(NEXTVAL('student_seq'),?,?,?)";
     private static final String SQL_COUNT_BY_EMAIL = "select COUNT(*) from student where email=?";
-    private static final String SQL_FIND_BY_ID = "select userId , name , email , password from student where userd=?";
+    private static final String SQL_FIND_BY_ID = "select userId , name , email , password from student where userId=?";
+    private static final String SQL_FIND_BY_EMAIL = "select userId , name , email , password from student where email=?";
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Override
     public Integer CreateStudent(String name, String email, String password) throws ServerAuthException {
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(10));
         try
         {
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -30,7 +33,7 @@ public class StudentRepositoryImp implements StudentRepository {
                 PreparedStatement ps = connection.prepareStatement(SQL_CREATE , Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, name);
                 ps.setString(2, email);
-                ps.setString(3, password);
+                ps.setString(3, hashedPassword);
                 return ps;
             } , keyHolder);
             return (Integer) keyHolder.getKeys().get("userId");
@@ -43,7 +46,16 @@ public class StudentRepositoryImp implements StudentRepository {
 
     @Override
     public StudentModel FindByEmailAndPassword(String email, String password) throws ServerAuthException {
-        return null;
+        try
+        {
+            StudentModel student = jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL , new Object[]{email} , StudentRowMapper);
+            if(!BCrypt.checkpw(password , student.getPassword()))
+                throw new ServerAuthException("Invalid Details. Password does not match");
+            return student;
+        }catch (Exception e)
+        {
+            throw new ServerAuthException("Invalid email or password.");
+        }
     }
 
     @Override

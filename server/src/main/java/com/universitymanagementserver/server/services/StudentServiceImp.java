@@ -3,7 +3,6 @@ package com.universitymanagementserver.server.services;
 import com.universitymanagementserver.server.exceptions.ServerAuthException;
 import com.universitymanagementserver.server.models.StudentModel;
 import com.universitymanagementserver.server.repositories.StudentRepository;
-import com.universitymanagementserver.server.repositories.StudentRepositoryImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,9 @@ public class StudentServiceImp implements StudentService {
 
     @Override
     public StudentModel ValidatingStudent(String email, String password) throws ServerAuthException {
-        return null;
+        if(email != null)
+            email = email.toLowerCase();
+        return studentRepository.FindByEmailAndPassword(email , password);
     }
 
     @Override

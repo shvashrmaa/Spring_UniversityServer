@@ -34,4 +34,16 @@ public class StudentController {
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Map<String , String>> loginStudent(@RequestBody Map<String , Object> StudentMap)
+    {
+        String email = (String) StudentMap.get("email");
+        String password = (String) StudentMap.get("password");
+
+        StudentModel student = studentService.ValidatingStudent(email , password);
+        Map<String , String> map = new HashMap<>();
+        map.put("message","login successfully");
+        return new ResponseEntity<>(map , HttpStatus.OK);
+    }
+
 }
