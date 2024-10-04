@@ -9,7 +9,7 @@ alter default privileges grant all on sequences to UniversityManagementSystem;
 create table student(
     userId integer primary key not null,
     name varchar(20) not null,
-    email varchar(20) not null,
+    email varchar(20) unique not null,
     password text not null,
     isAdmin boolean default false
 );
@@ -18,7 +18,7 @@ create table student(
 create table faculty(
     userId integer primary key,
     name varchar(20) not null,
-    email varchar(20) not null,
+    email varchar(20) unique not null,
     password text not null,
     isAdmin boolean default true
 );
