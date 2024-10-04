@@ -31,4 +31,15 @@ public class FacultyController {
         map.put("message" , "Registered Successfully");
         return new ResponseEntity<>(map , HttpStatus.OK);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String , String>> loginfaculty(@RequestBody Map<String , Object> facultyMap)
+    {
+        String email = (String) facultyMap.get("email");
+        String password = (String) facultyMap.get("password");
+        FacultyModel faculty = facultyService.ValidatingFaculty(email , password);
+        Map<String , String> map = new HashMap();
+        map.put("message" , "Login Successfully");
+        return new ResponseEntity<>(map , HttpStatus.OK);
+    }
 }

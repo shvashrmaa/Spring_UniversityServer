@@ -18,7 +18,9 @@ public class FacultyServiceImp implements FacultyService {
 
     @Override
     public FacultyModel ValidatingFaculty(String email, String password) throws ServerAuthException {
-        return null;
+        if(email != null)
+            email = email.toLowerCase();
+        return facultyRepository.FindByEmailAndPassword(email , password);
     }
 
     @Override

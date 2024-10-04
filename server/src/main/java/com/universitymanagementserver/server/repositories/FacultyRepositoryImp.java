@@ -2,6 +2,7 @@ package com.universitymanagementserver.server.repositories;
 
 import com.universitymanagementserver.server.exceptions.ServerAuthException;
 import com.universitymanagementserver.server.models.FacultyModel;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,14 +17,16 @@ import java.util.Map;
 @Repository
 public class FacultyRepositoryImp implements FacultyRepository {
     private static final String SQL_CREATE_FACULTY = "insert into faculty(userId , name , email , password) values(NEXTVAL('faculty_seq') , ? , ? , ?)";
-    private static final String SQL_FIND_BY_EMAIL = "select count(*) from faculty where email = ?";
+    private static final String SQL_COUNT_BY_EMAIL = "select count(*) from faculty where email = ?";
     private static final String SQL_FIND_BY_ID = "select userId , name , email , password from faculty where userId = ?";
+    private static final String SQL_FIND_BY_EMAIL = "select userId , name , email , password from faculty where email = ?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Override
     public Integer CreateFaculty(String name , String email , String password){
+        String hashedPassword = BCrypt.hashpw(password , BCrypt.gensalt(10));
         try{
             KeyHolder keyholder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection ->
@@ -31,7 +34,7 @@ public class FacultyRepositoryImp implements FacultyRepository {
                 PreparedStatement ps = connection.prepareStatement(SQL_CREATE_FACULTY , Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1  ,name);
                 ps.setString(2, email);
-                ps.setString(3, password);
+                ps.setString(3, hashedPassword);
                 return ps;
             },keyholder);
             return (Integer) keyholder.getKeys().get("userId");
@@ -43,12 +46,23 @@ public class FacultyRepositoryImp implements FacultyRepository {
 
     @Override
     public FacultyModel FindByEmailAndPassword(String email, String password) throws ServerAuthException {
-        return null;
+        try
+        {
+            FacultyModel faculty =  jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL , new Object[]{email} , FacultyRowMapper);
+            if(!BCrypt.checkpw(password , faculty.getPassword())){
+                throw new ServerAuthException("Invalid Password");
+            }
+            return faculty;
+        }catch (Exception e){
+            System.out.println(e);
+            throw new ServerAuthException("Invalid email or password.");
+        }
+
     }
 
     @Override
     public Integer FindByEmail(String email) throws ServerAuthException {
-        return jdbcTemplate.queryForObject(SQL_FIND_BY_EMAIL, new Object[]{email}, Integer.class);
+        return jdbcTemplate.queryForObject(SQL_COUNT_BY_EMAIL, new Object[]{email}, Integer.class);
     }
 
     @Override
