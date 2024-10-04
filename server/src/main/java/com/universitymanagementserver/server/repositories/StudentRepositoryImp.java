@@ -17,7 +17,7 @@ public class StudentRepositoryImp implements StudentRepository {
 
     private static final String SQL_CREATE = "insert into student(userId , name , email , password) values(NEXTVAL('student_seq'),?,?,?)";
     private static final String SQL_COUNT_BY_EMAIL = "select COUNT(*) from student where email=?";
-    private static final String SQL_FIND_BY_ID = "select userId , name , email , password from student where userId=?";
+    private static final String SQL_FIND_BY_ID = "select userId , name , email , password from student where userd=?";
     @Autowired
     JdbcTemplate jdbcTemplate;
 
