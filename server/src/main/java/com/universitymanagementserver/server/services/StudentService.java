@@ -9,4 +9,6 @@ public interface StudentService {
     StudentModel ValidatingStudent(String email , String password) throws ServerAuthException;
 
     StudentModel RegisterStudent(String name , String email , String password) throws ServerAuthException;
+
+    StudentModel GetStudentDetailsById(Integer userId) throws ServerAuthException;
 }

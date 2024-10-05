@@ -36,4 +36,8 @@ public class StudentServiceImp implements StudentService {
     Integer studentId = studentRepository.CreateStudent(name , email , password);
     return studentRepository.FindById(studentId);
     }
+    @Override
+    public StudentModel GetStudentDetailsById(Integer studentId) throws ServerAuthException {
+        return studentRepository.FindById(studentId);
+    }
 }
