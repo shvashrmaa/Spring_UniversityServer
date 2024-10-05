@@ -4,7 +4,7 @@ import axiosInstance from '../../utils/axios'
 
 interface Student
 {
-     name : string,
+     name? : string,
      email : string,
      password : string,
 }
@@ -34,6 +34,17 @@ export const registerStudent = createAsyncThunk('/students/registerStudent' , as
     }
 })
 
+export const loginStudent = createAsyncThunk('/students/loginStudent' , async(student:Student , {rejectWithValue  }) =>
+{
+    try {
+        const response = await axiosInstance.post("/student/login" , student)
+        return response.data;
+    } catch (error) {
+        console.log(error)
+        return rejectWithValue(error);
+    }
+})
+
 // eslint-disable-next-line react-refresh/only-export-components
 const StudentSlice = createSlice(
     {
@@ -54,6 +65,18 @@ const StudentSlice = createSlice(
             {
                 state.loading = false;
                 state.error = payload as object ;
+            }).addCase(loginStudent.pending , (state) =>
+            {
+                state.loading = true;
+                state.error = null;
+            }).addCase(loginStudent.fulfilled , (state , {payload}) =>
+            {
+                state.loading = false;
+                state.token = payload;
+            }).addCase(loginStudent.rejected , (state , {payload}) =>
+            {
+                state.loading = false;
+                state.error = payload as object;
             })
         }
     }

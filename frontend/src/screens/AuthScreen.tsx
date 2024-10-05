@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "../components/Login";
 import Register from "../components/Register";
-import ManipalImage from '../assets/images/ManipalImage.jpg'
+import ManipalImage from "../assets/images/ManipalImage.jpg";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/Redux";
 
-const AuthScreen: React.FC = () => {
-  const [userId, setUserId] = useState<boolean>(false);
-  const [component , setComponent] = useState<string>("Login");
+
+const AuthScreen:React.FC = () => {
+  const [token, setToken] = useState<null | object>(useSelector((state:RootState) => state.StudentAuth.token));
+  const [component, setComponent] = useState<string>("Login");
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (userId) navigate("/");
-  }, []);
+    if (token !== null) navigate("/");
+  }, [navigate, token]);
 
   return (
     <div className="w-[100vw] h-[100vh] flex">
@@ -24,11 +28,19 @@ const AuthScreen: React.FC = () => {
               Wecome to University Management System
             </h1>
           </div>
-          {component === "Register" ? <Register setComponent={setComponent}/> : <Login setComponent={setComponent}/>}
+          {component === "Register" ? (
+            <Register setComponent={setComponent} />
+          ) : (
+            <Login setComponent={setComponent} />
+          )}
         </div>
       </div>
       <div className="h-[100%] flex-[.7]">
-        <img src={ManipalImage} alt="Manipal Image" className="h-[100%] w-[100%] object-fill" />
+        <img
+          src={ManipalImage}
+          alt="Manipal Image"
+          className="h-[100%] w-[100%] object-fill"
+        />
       </div>
     </div>
   );
