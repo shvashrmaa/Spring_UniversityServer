@@ -1,4 +1,4 @@
-package com.universitymanagementserver.server.utils;
+package com.universitymanagementserver.server.config;
 
 import io.micrometer.common.lang.NonNullApi;
 import org.springframework.context.annotation.Bean;

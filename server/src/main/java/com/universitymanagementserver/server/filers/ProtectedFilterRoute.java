@@ -1,16 +1,20 @@
 package com.universitymanagementserver.server.filers;
 
-import com.universitymanagementserver.server.Constant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
+import java.security.Key;
 
 public class ProtectedFilterRoute extends GenericFilter {
+
+    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
@@ -22,7 +26,7 @@ public class ProtectedFilterRoute extends GenericFilter {
             if (authHeaderArr.length > 1 && authHeaderArr[1] != null) {
                 String token = authHeaderArr[1];
                 try {
-                    Claims claims = Jwts.parser().setSigningKey(Constant.SECRET_API_KEY).parseClaimsJws(token).getBody();
+                    Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
                     httpRequest.setAttribute("userId", Integer.parseInt(claims.get("userId").toString()));
                 } catch (Exception e) {
                     httpResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid or Expired Token");
