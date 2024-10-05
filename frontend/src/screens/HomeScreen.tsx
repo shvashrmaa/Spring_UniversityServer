@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../redux/Redux';
+import Navbar from '../components/Navbar';
 
 const HomeScreen:React.FC = () => {
     const StudentAuthState = useSelector((state:RootState) => state.StudentAuth);
@@ -18,7 +19,11 @@ const HomeScreen:React.FC = () => {
     },[token])
     
   return (
-    <div>This is HomeScreen</div>
+    <div className='h-[100vh] w-[100vw] flex flex-col'>
+        <Navbar />
+        <div>Center body</div>
+        <footer></footer>
+    </div>
   )
 }
 

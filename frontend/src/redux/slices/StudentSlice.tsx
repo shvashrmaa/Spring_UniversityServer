@@ -56,7 +56,7 @@ const StudentSlice = createSlice(
                 state.token = action.payload;
                 localStorage.setItem("token" , action.payload)
             },
-            cleartoken(state)
+            clearToken(state)
             {
                 state.token = null;
                 localStorage.removeItem("token");
@@ -94,5 +94,7 @@ const StudentSlice = createSlice(
         }
     }
 )
+
+export const {setToken , clearToken} = StudentSlice.actions;
 
 export default StudentSlice.reducer;
