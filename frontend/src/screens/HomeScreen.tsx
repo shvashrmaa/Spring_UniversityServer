@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../redux/Redux';
 
 const HomeScreen:React.FC = () => {
-    const [token , setToken] = useState<null | object>(useSelector((state:RootState) => state.StudentAuth.token))
+    const StudentAuthState = useSelector((state:RootState) => state.StudentAuth);
+    const {token} = StudentAuthState;
     const navigate = useNavigate();
 
     useEffect(() => {
         if(token === null) navigate("/authentication")
-    }, [])
+    }, [navigate, token])
 
     useEffect(() =>
     {

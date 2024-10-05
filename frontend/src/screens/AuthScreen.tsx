@@ -6,9 +6,10 @@ import ManipalImage from "../assets/images/ManipalImage.jpg";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/Redux";
 
-
-const AuthScreen:React.FC = () => {
-  const [token, setToken] = useState<null | object>(useSelector((state:RootState) => state.StudentAuth.token));
+const AuthScreen: React.FC = () => {
+  const StudentAuthState = useSelector((state: RootState) => state.StudentAuth);
+  const { token } = StudentAuthState;
+  
   const [component, setComponent] = useState<string>("Login");
   const navigate = useNavigate();
 
