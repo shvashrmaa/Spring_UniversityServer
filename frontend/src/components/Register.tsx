@@ -31,7 +31,7 @@ const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
   const onChangeComponentButtonClicked = () => {
     setComponent("Login");
   };
-  
+
   return (
     <div className="w-[100%] bg-white rounded-md flex items-center justify-center flex-col">
       <h1 className="font-bold text-primary-color text-[1.3rem] underline cursor-pointer mb-6">
@@ -90,7 +90,7 @@ const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
           value={studentInfo.confirmPassword}
         />
       </form>
-      <div className="flex flex-row justify-center items-center space-x-2 m-4">
+      <div className="flex flex-row justify-center items-center space-x-1 m-5">
         <input
           type="checkbox"
           name="TermsCheckbox"
@@ -99,7 +99,7 @@ const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
         />
         <label
           htmlFor="TermsCheckbox"
-          className="font-semibold text-[.8rem] text-gray-600 mb-1"
+          className="font-semibold text-[.8rem] text-gray-600"
         >
           By clicking this you accepted all terms & conditions
         </label>

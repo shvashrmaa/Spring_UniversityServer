@@ -1,4 +1,4 @@
-import {createAsyncThunk , createSlice} from '@reduxjs/toolkit'
+import {createAsyncThunk , createSlice, PayloadAction} from '@reduxjs/toolkit'
 import axiosInstance from '../../utils/axios'
 
 
@@ -13,14 +13,14 @@ interface studentRegisterState
 {
     loading : boolean,
     error : null | object,
-    token : object | null
+    token : string | null
 }
 
 const initialState: studentRegisterState =
 {
     loading : false,
     error : null,
-    token : null,
+    token : localStorage.getItem("token"),
 }
 
 export const registerStudent = createAsyncThunk('/students/registerStudent' , async(student:Student , {rejectWithValue}) =>
@@ -50,7 +50,18 @@ const StudentSlice = createSlice(
     {
         name : "students",
         initialState,
-        reducers : {},
+        reducers : {
+            setToken(state , action:PayloadAction<string>)
+            {
+                state.token = action.payload;
+                localStorage.setItem("token" , action.payload)
+            },
+            cleartoken(state)
+            {
+                state.token = null;
+                localStorage.removeItem("token");
+            }
+        },
         extraReducers : (builder) =>
         {
             builder.addCase(registerStudent.pending , (state) =>
@@ -60,7 +71,8 @@ const StudentSlice = createSlice(
             }).addCase(registerStudent.fulfilled , (state , {payload}) =>
             {
                 state.loading = false;
-                state.token = payload;
+                state.token = payload.token;
+                localStorage.setItem("token" , payload.token);
             }).addCase(registerStudent.rejected , (state , {payload}) =>
             {
                 state.loading = false;
@@ -72,7 +84,8 @@ const StudentSlice = createSlice(
             }).addCase(loginStudent.fulfilled , (state , {payload}) =>
             {
                 state.loading = false;
-                state.token = payload;
+                state.token = payload.token;
+                localStorage.setItem("token" , payload.token)
             }).addCase(loginStudent.rejected , (state , {payload}) =>
             {
                 state.loading = false;
