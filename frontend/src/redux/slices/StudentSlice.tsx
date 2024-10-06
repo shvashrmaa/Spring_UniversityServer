@@ -21,7 +21,7 @@ const initialState: studentRegisterState =
 {
     loading : false,
     error : null,
-    token : localStorage.getItem("token"),
+    token : sessionStorage.getItem("token"),
     user : null
 }
 
@@ -64,12 +64,12 @@ const StudentSlice = createSlice(
             setToken(state , action:PayloadAction<string>)
             {
                 state.token = action.payload;
-                localStorage.setItem("token" , action.payload)
+                sessionStorage.setItem("token" , action.payload)
             },
             clearToken(state)
             {
                 state.token = null;
-                localStorage.removeItem("token");
+                sessionStorage.removeItem("token");
             }
         },
         extraReducers : (builder) =>
@@ -82,7 +82,7 @@ const StudentSlice = createSlice(
             {
                 state.loading = false;
                 state.token = payload.token;
-                localStorage.setItem("token" , payload.token);
+                sessionStorage.setItem("token" , payload.token);
             }).addCase(registerStudent.rejected , (state , action) =>
             {
                 state.loading = false;
@@ -95,7 +95,7 @@ const StudentSlice = createSlice(
             {
                 state.loading = false;
                 state.token = payload.token;
-                localStorage.setItem("token" , payload.token)
+                sessionStorage.setItem("token" , payload.token)
             }).addCase(loginStudent.rejected , (state , action) =>
             {
                 state.loading = false;
