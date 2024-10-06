@@ -12,8 +12,9 @@ interface Student
 interface studentRegisterState
 {
     loading : boolean,
-    error : null | object,
-    token : string | null
+    error : unknown,
+    token : string | null,
+    user : object | null
 }
 
 const initialState: studentRegisterState =
@@ -21,6 +22,7 @@ const initialState: studentRegisterState =
     loading : false,
     error : null,
     token : localStorage.getItem("token"),
+    user : null
 }
 
 export const registerStudent = createAsyncThunk('/students/registerStudent' , async(student:Student , {rejectWithValue}) =>
@@ -29,7 +31,6 @@ export const registerStudent = createAsyncThunk('/students/registerStudent' , as
         const response = await axiosInstance.post("/student/register" , student)
         return response.data;
     } catch (error) {
-        console.log(error)
         return rejectWithValue(error)
     }
 })
@@ -40,8 +41,17 @@ export const loginStudent = createAsyncThunk('/students/loginStudent' , async(st
         const response = await axiosInstance.post("/student/login" , student)
         return response.data;
     } catch (error) {
-        console.log(error)
         return rejectWithValue(error);
+    }
+})
+
+export const getStudentDetails = createAsyncThunk('students/getStudentDetails' , async(token: string , {rejectWithValue}) =>
+{
+    try {
+        const response = await axiosInstance.get("/protected/student" , {headers : {Authorization : `Bearer ${token}`}})
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error)
     }
 })
 
@@ -73,10 +83,10 @@ const StudentSlice = createSlice(
                 state.loading = false;
                 state.token = payload.token;
                 localStorage.setItem("token" , payload.token);
-            }).addCase(registerStudent.rejected , (state , {payload}) =>
+            }).addCase(registerStudent.rejected , (state , action) =>
             {
                 state.loading = false;
-                state.error = payload as object ;
+                state.error = action.error.message ;
             }).addCase(loginStudent.pending , (state) =>
             {
                 state.loading = true;
@@ -86,11 +96,24 @@ const StudentSlice = createSlice(
                 state.loading = false;
                 state.token = payload.token;
                 localStorage.setItem("token" , payload.token)
-            }).addCase(loginStudent.rejected , (state , {payload}) =>
+            }).addCase(loginStudent.rejected , (state , action) =>
             {
                 state.loading = false;
-                state.error = payload as object;
-            })
+                state.error = action.error.message;
+            }).addCase(getStudentDetails.pending , (state) =>
+            {
+                state.loading = true;
+                state.error = null;
+            }).addCase(getStudentDetails.fulfilled , (state , {payload}) =>
+            {
+                state.loading = false;
+                state.user = payload;
+            }).addCase(getStudentDetails.rejected ,(state , action) =>
+            {
+                state.loading = false;
+                state.error = action.error.message;
+            }
+            )
         }
     }
 )
