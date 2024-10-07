@@ -1,9 +1,7 @@
-drop table student;
-drop table faculty;
-drop sequence student_seq;
-drop sequence faculty_seq;
-drop database UniversityManagementSystem;
+drop role if exists shvashrma;
+drop user if exists shvashrma;
 create user shvashrma with password 'shvashrma';
+drop database if exists UniversityManagementSystem;
 create database UniversityManagementSystem with owner=shvashrma;
 \connect UniversityManagementSystem;
 alter default privileges grant all on tables to shvashrma;
@@ -11,7 +9,7 @@ alter default privileges grant all on sequences to shvashrma;
 
 create type gender as enum('Male' , 'Female');
 create type stream as enum('CSE' , 'ME' , 'CE' , 'EE');
-create type course as enum('B.TECH' , 'M.TECH' , 'BCA' , 'MCA' , 'BSC' , 'MSC');
+create type courseName as enum('B.TECH' , 'M.TECH' , 'BCA' , 'MCA' , 'BSC' , 'MSC');
 create type courseType as enum('OFFLINE' , 'ONLINE');
 create type studentType as enum('REGULAR' , 'PRIVATE');
 create type designation as enum('HOD' , 'Professor' , 'Assistant Professor');
@@ -36,7 +34,7 @@ create table student(
     userId integer primary key not null,
     enrollmentNumber integer not null,
     stream stream,
-    course course,
+    course courseName,
     rollNumber integer not null,
     courseType courseType,
     studentType studentType,
@@ -50,7 +48,7 @@ create table student(
 create table faculty(
     userId integer primary key not null,
     designation designation,
-    course course,
+    course courseName,
     stream stream,
     facultyId integer not null,
     subject varchar(255),
@@ -59,6 +57,15 @@ create table faculty(
                     on delete cascade
 );
 
+
+create table course(
+    courseId serial primary key not null,
+    courseName courseName,
+    facultyId integer,
+    foreign key (facultyId)
+                   references faculty(userId)
+                   on delete cascade
+);
 
 create table assignments
 (
@@ -69,21 +76,11 @@ create table assignments
     title text,
     assignedDate date default current_date,
     foreign key (facultyId)
-                          references faculty(userId)
-                          on delete cascade ,
+        references faculty(userId)
+        on delete cascade ,
     foreign key (courseId)
-                          references course(courseId)
-                          on delete cascade
+        references course(courseId)
 
-);
-
-create table course(
-    courseId serial primary key not null,
-    courseName course,
-    facultyId integer,
-    foreign key (facultyId)
-                   references faculty(userId)
-                   on delete cascade
 );
 
 create table studentAssignments(
