@@ -26,8 +26,8 @@ create table users(
     gender gender,
     age integer,
     profilePicUrl text,
-    createdAt timestamp,
-    updateAt timestamp
+    createdAt timestamp default current_date,
+    updateAt timestamp  default current_date
 );
 
 create table student(
