@@ -5,8 +5,8 @@ import { RootState } from '../redux/Redux';
 import Navbar from '../components/Navbar';
 
 const HomeScreen:React.FC = () => {
-    const StudentAuthState = useSelector((state:RootState) => state.StudentAuth);
-    const {token} = StudentAuthState;
+    const UserAuthState = useSelector((state:RootState) => state.UserAuth);
+    const {token} = UserAuthState;
     const navigate = useNavigate();
 
     useEffect(() => {

@@ -4,7 +4,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/Redux";
-import { clearToken } from "../redux/slices/StudentSlice";
+import { clearToken } from "../redux/slices/UserSlice";
 
 const Navbar = () => {
     const dispatch:AppDispatch = useDispatch()

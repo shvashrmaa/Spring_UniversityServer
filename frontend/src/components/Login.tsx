@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { loginStudent } from "../redux/slices/StudentSlice";
+import { loginUser } from "../redux/slices/UserSlice";
 import { AppDispatch } from "../redux/Redux";
 import { useDispatch } from "react-redux";
 
@@ -9,17 +9,17 @@ interface ChildComponentProps {
 
 const Login: React.FC<ChildComponentProps> = ({ setComponent }) => {
     const dispatch:AppDispatch = useDispatch();
-  const [studentInfo, setStudentInfo] = useState({ email: "", password: "" });
-  const onchangeStudentAttributes = (
+  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+  const onchangeUserAttributes = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setStudentInfo({ ...studentInfo, [e.target.name]: e.target.value });
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
   const onLoginButtonClicked = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(loginStudent(studentInfo));
-    setStudentInfo({ password: "", email: "" });
+    dispatch(loginUser(userInfo));
+    setUserInfo({ password: "", email: "" });
   };
 
   const onChangeComponentButtonClicked = () => {
@@ -40,8 +40,8 @@ const Login: React.FC<ChildComponentProps> = ({ setComponent }) => {
           id="email"
           required
           className="py-1 font-semibold text-gray-700 border-b-2 border-gray-300 outline-none mb-2"
-          onChange={onchangeStudentAttributes}
-          value={studentInfo.email}
+          onChange={onchangeUserAttributes}
+          value={userInfo.email}
         />
         <label htmlFor="password" className="font-semibold text-gray-600 mb-1">
           Password
@@ -52,8 +52,8 @@ const Login: React.FC<ChildComponentProps> = ({ setComponent }) => {
           id="password"
           required
           className="py-1 font-semibold text-gray-700 border-b-2 border-gray-300 outline-none mb-2"
-          onChange={onchangeStudentAttributes}
-          value={studentInfo.password}
+          onChange={onchangeUserAttributes}
+          value={userInfo.password}
         />
       </form>
       <div className="mb-4">
@@ -61,8 +61,8 @@ const Login: React.FC<ChildComponentProps> = ({ setComponent }) => {
           className="px-20 py-2 border-2 border-primary-color text-[1rem] font-bold bg-white text-primary-color hover:bg-primary-color hover:text-white"
           onClick={onLoginButtonClicked}
           disabled={
-            studentInfo.email === "" ||
-            studentInfo.password === ""
+            userInfo.email === "" ||
+            userInfo.password === ""
           }
         >
           Login

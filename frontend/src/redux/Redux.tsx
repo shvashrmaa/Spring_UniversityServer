@@ -1,10 +1,10 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import { thunk } from 'redux-thunk';
-import StudentReducer from './slices/StudentSlice'
+import UserReducer from './slices/UserSlice'
 
 const rootReducer = combineReducers(
     {
-        StudentAuth : StudentReducer
+        UserAuth : UserReducer
     }
 )
 

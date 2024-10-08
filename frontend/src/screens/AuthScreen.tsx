@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/Redux";
 
 const AuthScreen: React.FC = () => {
-  const StudentAuthState = useSelector((state: RootState) => state.StudentAuth);
-  const { token } = StudentAuthState;
+  const UserAuthState = useSelector((state: RootState) => state.UserAuth);
+  const { token } = UserAuthState;
   
   const [component, setComponent] = useState<string>("Login");
   const navigate = useNavigate();

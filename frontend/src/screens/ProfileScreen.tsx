@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/Redux";
-import { getStudentDetails } from "../redux/slices/StudentSlice";
+import { getUserDetails } from "../redux/slices/UserSlice";
 import { User } from "../types";
 
 const ProfileScreen = () => {
   const dispatch: AppDispatch = useDispatch();
-  const token = useSelector((state: RootState) => state.StudentAuth.token);
-  const user = useSelector((state: RootState) => state.StudentAuth.user) as User;
+  const token = useSelector((state: RootState) => state.UserAuth.token);
+  const user = useSelector((state: RootState) => state.UserAuth.user) as User;
 
   useEffect(() => {
-    if (token) dispatch(getStudentDetails(token));
+    if (token) dispatch(getUserDetails(token));
   }, [dispatch, token]);
 
   const {name , email , password , userId} = user;

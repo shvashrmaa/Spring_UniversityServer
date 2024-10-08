@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { registerStudent } from "../redux/slices/StudentSlice";
+import { registerUser } from "../redux/slices/UserSlice";
 import { AppDispatch } from "../redux/Redux";
 
 interface ChildComponentProps {
@@ -9,23 +9,23 @@ interface ChildComponentProps {
 
 const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
   const dispatch: AppDispatch = useDispatch();
-  const [studentInfo, setStudentInfo] = useState({
+  const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const onchangeStudentAttributes = (
+  const onchangeUserAttributes = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setStudentInfo({ ...studentInfo, [e.target.name]: e.target.value });
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
   const onRegisterButtonClicked = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(registerStudent(studentInfo));
-    setStudentInfo({ name: "", password: "", email: "", confirmPassword: "" });
+    dispatch(registerUser(userInfo));
+    setUserInfo({ name: "", password: "", email: "", confirmPassword: "" });
   };
 
   const onChangeComponentButtonClicked = () => {
@@ -47,8 +47,8 @@ const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
           id="name"
           required
           className="py-1 font-semibold text-gray-700 border-b-2 border-gray-300 outline-none mb-2"
-          onChange={onchangeStudentAttributes}
-          value={studentInfo.name}
+          onChange={onchangeUserAttributes}
+          value={userInfo.name}
         />
         <label htmlFor="email" className="font-semibold text-gray-600 mb-1">
           Email Address
@@ -59,8 +59,8 @@ const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
           id="email"
           required
           className="py-1 font-semibold text-gray-700 border-b-2 border-gray-300 outline-none mb-2"
-          onChange={onchangeStudentAttributes}
-          value={studentInfo.email}
+          onChange={onchangeUserAttributes}
+          value={userInfo.email}
         />
         <label htmlFor="password" className="font-semibold text-gray-600 mb-1">
           Password
@@ -71,8 +71,8 @@ const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
           id="password"
           required
           className="py-1 font-semibold text-gray-700 border-b-2 border-gray-300 outline-none mb-2"
-          onChange={onchangeStudentAttributes}
-          value={studentInfo.password}
+          onChange={onchangeUserAttributes}
+          value={userInfo.password}
         />
         <label
           htmlFor="confirmPassword"
@@ -86,8 +86,8 @@ const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
           id="confirmPassword"
           required
           className="py-1 font-semibold text-gray-700 border-b-2 border-gray-300 outline-none mb-2"
-          onChange={onchangeStudentAttributes}
-          value={studentInfo.confirmPassword}
+          onChange={onchangeUserAttributes}
+          value={userInfo.confirmPassword}
         />
       </form>
       <div className="flex flex-row justify-center items-center space-x-1 m-5">
@@ -109,10 +109,10 @@ const Register: React.FC<ChildComponentProps> = ({ setComponent }) => {
           className="px-20 py-2 border-2 border-primary-color text-[1rem] font-bold bg-white text-primary-color hover:bg-primary-color hover:text-white"
           onClick={onRegisterButtonClicked}
           disabled={
-            studentInfo.name === "" ||
-            studentInfo.confirmPassword === "" ||
-            studentInfo.email === "" ||
-            studentInfo.password === ""
+            userInfo.name === "" ||
+            userInfo.confirmPassword === "" ||
+            userInfo.email === "" ||
+            userInfo.password === ""
           }
         >
           Register
