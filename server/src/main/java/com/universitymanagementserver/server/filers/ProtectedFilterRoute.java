@@ -3,15 +3,12 @@ package com.universitymanagementserver.server.filers;
 import com.universitymanagementserver.server.Constant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
-import java.security.Key;
 
 public class ProtectedFilterRoute extends GenericFilter {
     @Override
@@ -28,6 +25,7 @@ public class ProtectedFilterRoute extends GenericFilter {
                     Claims claims = Jwts.parserBuilder().setSigningKey(Constant.SECRET_KEY).build().parseClaimsJws(token).getBody();
                     httpRequest.setAttribute("userId", Integer.parseInt(claims.get("userId").toString()));
                 } catch (Exception e) {
+                    System.out.println(e);
                     httpResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid or Expired Token");
                 }
             } else {

@@ -16,7 +16,7 @@ public class GenerateTokenKey {
         String Token = Jwts.builder().signWith(Constant.SECRET_KEY)
                 .setIssuedAt(new Date(timeStamp))
                 .setExpiration(new Date(timeStamp + Constant.EXPIRATION_TIME))
-                .claim("userID" , user.getUserId())
+                .claim("userId" , user.getUserId())
                 .claim("email" , user.getEmail())
                 .claim("name" , user.getName())
                 .compact();
