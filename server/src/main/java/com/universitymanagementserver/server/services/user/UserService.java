@@ -1,8 +1,6 @@
 package com.universitymanagementserver.server.services.user;
 
-import com.universitymanagementserver.server.exceptions.ServerAuthException;
-import com.universitymanagementserver.server.exceptions.ServerConflictException;
-import com.universitymanagementserver.server.exceptions.ServerNotModifyException;
+import com.universitymanagementserver.server.exceptions.*;
 import com.universitymanagementserver.server.models.UserModel;
 import com.universitymanagementserver.server.repositories.User.UserRepository;
 import org.apache.catalina.User;
@@ -43,5 +41,14 @@ public class UserService implements  IUserService{
         int count = userRepository.updateUSerDetails(userId , attributes);
         if(count > 0) return userRepository.findUserById(userId);
         throw new ServerNotModifyException("Updates not successful");
+    }
+
+    @Override
+    public UserModel getUserDetails(int userId) {
+        UserModel user = userRepository.findUserById(userId);
+        if(user != null)
+            return user;
+        else
+            throw new ServerNotFoundException("Not found!");
     }
 }

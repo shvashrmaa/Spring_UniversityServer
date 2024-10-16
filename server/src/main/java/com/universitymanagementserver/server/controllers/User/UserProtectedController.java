@@ -15,10 +15,19 @@ public class UserProtectedController {
 
     @Autowired
     UserService userService;
+
     @PutMapping("/update")
     public ResponseEntity<UserModel> updateUserDetails(@RequestAttribute Integer userId, @RequestBody Map<String , Object> userMap)
     {
         UserModel user = userService.updateUserDetails(userId, userMap);
         return new ResponseEntity<>(user , HttpStatus.OK);
     }
+
+    @GetMapping("")
+    public ResponseEntity<UserModel> getUserDetails(@RequestAttribute Integer userId)
+    {
+        UserModel user = userService.getUserDetails(userId);
+        return new ResponseEntity<>(user , HttpStatus.OK);
+    }
+
 }

@@ -15,4 +15,6 @@ public interface IUserService {
     UserModel validatingUser(String email , String password) throws ServerAuthException;
 
     UserModel updateUserDetails(int userId , Map<String , Object> attributes) throws ServerAuthException , ServerBadRequestException , ServerNotFoundException , ServerConflictException;
+
+    UserModel getUserDetails(int userId) throws ServerNotFoundException , ServerBadRequestException , ServerAuthException;
 }
