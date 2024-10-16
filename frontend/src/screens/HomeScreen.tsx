@@ -12,11 +12,6 @@ const HomeScreen:React.FC = () => {
     useEffect(() => {
         if(token === null) navigate("/authentication")
     }, [navigate, token])
-
-    useEffect(() =>
-    {
-        console.log(token)
-    },[token])
     
   return (
     <div className='h-[100vh] w-[100vw] flex flex-col'>

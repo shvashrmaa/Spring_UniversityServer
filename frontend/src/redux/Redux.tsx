@@ -4,7 +4,7 @@ import UserReducer from './slices/UserSlice'
 
 const rootReducer = combineReducers(
     {
-        UserAuth : UserReducer
+        UserAuth : UserReducer,
     }
 )
 

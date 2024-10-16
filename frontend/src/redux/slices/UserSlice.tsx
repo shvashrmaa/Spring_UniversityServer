@@ -25,7 +25,7 @@ const initialState: UserRegisterState =
     user : null
 }
 
-export const registerUser = createAsyncThunk('/user/registerStudent' , async(user:User , {rejectWithValue}) =>
+export const registerUser = createAsyncThunk('/users/registerUser' , async(user:User , {rejectWithValue}) =>
 {
     try {
         const response = await axiosInstance.post("/user/register" , user)
@@ -35,7 +35,7 @@ export const registerUser = createAsyncThunk('/user/registerStudent' , async(use
     }
 })
 
-export const loginUser = createAsyncThunk('/user/loginStudent' , async(user:User , {rejectWithValue  }) =>
+export const loginUser = createAsyncThunk('/users/loginUser' , async(user:User , {rejectWithValue  }) =>
 {
     try {
         const response = await axiosInstance.post("/user/login" , user)
@@ -45,7 +45,7 @@ export const loginUser = createAsyncThunk('/user/loginStudent' , async(user:User
     }
 })
 
-export const getUserDetails = createAsyncThunk('user/getUserDetails' , async(token: string , {rejectWithValue}) =>
+export const getUserDetails = createAsyncThunk('users/getUserDetails' , async(token: string , {rejectWithValue}) =>
 {
     try {
         const response = await axiosInstance.get("/protected/user" , {headers : {Authorization : `Bearer ${token}`}})
@@ -81,8 +81,8 @@ const UserSlice = createSlice(
             }).addCase(registerUser.fulfilled , (state , {payload}) =>
             {
                 state.loading = false;
-                state.token = payload.token;
-                sessionStorage.setItem("token" , payload.token);
+                state.token = payload.Token;
+                sessionStorage.setItem("token" , payload.Token);
             }).addCase(registerUser.rejected , (state , action) =>
             {
                 state.loading = false;
@@ -94,8 +94,8 @@ const UserSlice = createSlice(
             }).addCase(loginUser.fulfilled , (state , {payload}) =>
             {
                 state.loading = false;
-                state.token = payload.token;
-                sessionStorage.setItem("token" , payload.token)
+                state.token = payload.Token;
+                sessionStorage.setItem("token" , payload.Token)
             }).addCase(loginUser.rejected , (state , action) =>
             {
                 state.loading = false;
