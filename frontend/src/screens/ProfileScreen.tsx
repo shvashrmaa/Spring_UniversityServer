@@ -9,18 +9,16 @@ const ProfileScreen = () => {
   const token = useSelector((state: RootState) => state.UserAuth.token);
   const user = useSelector((state: RootState) => state.UserAuth.user) as User;
 
-  useEffect(() => {
+  useEffect(() => { 
     if (token) dispatch(getUserDetails(token));
   }, [dispatch, token]);
 
-  const {name , email , password , userId} = user;
-
   return (
     <div>
-      <div>user : {name}</div>
-      <div>user : {email}</div>
-      <div>user : {password}</div>
-      <div>user : {userId}</div>
+      <div>user : {user?.name}</div>
+      <div>user : {user?.email}</div>
+      <div>user : {user?.password}</div>
+      <div>user : {user?.userId}</div>
     </div>
   );
 };
